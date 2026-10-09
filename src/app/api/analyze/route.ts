@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ZAI from "z-ai-web-dev-sdk";
+import { createAi, type AIInstance } from "@/lib/ai-provider";
 import {
   AnalysisMode,
   AnalysisResult,
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
 
   let zai;
   try {
-    zai = await ZAI.create();
+    zai = await createAi();
   } catch (e) {
     console.error("SDK init fail", e);
     return NextResponse.json(
@@ -233,7 +233,7 @@ async function handleDocument(body: ParsedBody, mode: AnalysisMode = "document")
 
   let zai;
   try {
-    zai = await ZAI.create();
+    zai = await createAi();
   } catch (e) {
     console.error("SDK init fail", e);
     return NextResponse.json(
@@ -446,7 +446,7 @@ async function handleDocument(body: ParsedBody, mode: AnalysisMode = "document")
 
 // Scanned/image PDF: pass the original file to the VLM via file_url.
 async function analyzeScannedPdf(
-  zai: Awaited<ReturnType<typeof ZAI.create>>,
+  zai: AIInstance,
   dataUrl: string,
   pages: number,
   mode: AnalysisMode,
@@ -509,7 +509,7 @@ async function analyzeScannedPdf(
 // LLM call. Used when the single-call output truncated but still contains
 // many complete finding objects.
 async function finishRecovered(
-  zai: Awaited<ReturnType<typeof ZAI.create>>,
+  zai: AIInstance,
   recovered: ReturnType<typeof recoverFromTruncated>,
   mode: AnalysisMode,
   doc: { pages: number; kind: string },
@@ -618,7 +618,7 @@ async function finishRecovered(
 // Smart merge for large documents: code-based dedupe (no output-token limit)
 // + one small LLM "summary" call for reportType/summary/status/steps/warning.
 async function smartMerge(
-  zai: Awaited<ReturnType<typeof ZAI.create>>,
+  zai: AIInstance,
   partials: unknown[],
   mode: AnalysisMode,
   doc: { pages: number; kind: string },
