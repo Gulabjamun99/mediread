@@ -1,15 +1,15 @@
 {
-  "name": "nextjs_tailwind_shadcn_ts",
+  "name": "mediread",
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000 2>&1 | tee dev.log",
+    "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+    "start": "next start",
     "lint": "eslint ."
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1", 
+    "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.1.1",
